@@ -1,0 +1,18 @@
+{% load custom_tags %}
+<a class="waves-effect waves-light btn modal-trigger" href="#comment-modal">نظر دهید!</a>
+
+<!-- comment modal -->
+<div id="comment-modal" class="modal">
+  <div class="modal-content">
+    <h4>نظر دهید!</h4>
+    <div class="row">
+      <div class="input-field comment-input-field col s12">
+        <textarea id="comment-val" class="materialize-textarea"></textarea>
+        <label for="comment-val">نظر خود را اینجا بنویسید...</label>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a id="submit-comment" href="#!" data-id="{{ obj.id }}" data-type="{{ obj|get_type }}" class="modal-close waves-effect waves-green btn-flat">ثبت</a>
+  </div>
+</div>

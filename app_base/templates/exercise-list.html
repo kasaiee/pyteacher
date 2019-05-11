@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container">
+    <div class="section">
+      <div class="row">
+        <h2>وضعیت شما در حل تمرینات این دوره</h2>
+        <div class="col s12">
+          <ul class="collapsible">
+            {% for ex in exercise %}
+              
+            <li>
+              <div class="collapsible-header ltr valign-wrapper">
+                <span class="new badge light-blue" data-badge-caption="۴ امتیاز"></span>
+                <span style="margin-top: 5px;">تمرین اول</span>
+                <i class="material-icons">filter_drama</i>
+              </div>
+              <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+{% endblock content %}
+  
+
+{% block js %}
+  {{ block.super }}
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('.sidenav').sidenav({edge: 'right'});
+      $('.collapsible').collapsible();
+    });
+  </script>
+{% endblock js %}

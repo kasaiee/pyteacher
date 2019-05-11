@@ -1,0 +1,36 @@
+{% load thumbnail %}
+{% load social_tags %}
+{% load custom_tags %}
+
+<div class="card">
+  <div class="card-image">
+    <a href="{{ obj.get_absolute_url }}">
+      {% if obj.image %}
+        {% thumbnail obj.image "300x220" crop="center" as im %}
+          <img src="{{ im.url }}" class="responsive-img" width="{{ im.width }}" height="{{ im.height }}">
+        {% endthumbnail %}
+        <span class="card-title">{{ obj.title }}</span>
+      {% else %}
+      asd
+      {% endif %}
+    </a>
+  </div>
+  <div class="card-action" style="padding: 15px 0 1px 15px;">
+    <div class="row">
+      <div class="col s12">
+        <i class="material-icons left bookmark {% if obj|is_booked:request.user %}orange-text{% else %}black-text{% endif %}" data-id="{{ obj.id }}" data-type="{{ obj|get_type }}">{% if obj|is_booked:request.user %}bookmark{% else %}bookmark_border{% endif %}</i>
+        <a class="modal-trigger" href="#sharing-modal-{{ obj.id }}"><i class="material-icons left share grey-text">share</i></a>
+        <i class="material-icons left like {% if obj|is_liked:request.user %}red-text{% else %}black-text{% endif %}" data-id="{{ obj.id }}" data-type="{{ obj|get_type }}">{% if obj|is_liked:request.user %}favorite{% else %}favorite_border{% endif %}</i>
+
+        {% if obj|get_type == 'Course' %}
+          {% if obj.price %}
+            <span style="margin-right: 15px;" class="badge orange right white-text">{{ obj.price }} تومان</span>
+          {% else %}
+            <span style="margin-right: 15px;" class="badge teal right white-text">رایگان</span>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% include 'components/sharing.html' %}

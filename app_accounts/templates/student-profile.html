@@ -1,0 +1,62 @@
+{% extends "student-dashboard.html" %}
+{% load crispy_forms_tags %}
+{% load thumbnail %}
+
+
+{% block content %}{{ block.super }}
+
+  <div class="container">
+    <div class="section">
+      <div class="row">
+        <h2>پروفایل من</h2>
+        <div class="card-panel">
+          <div class="center" style="position: relative">
+            {% if new_avatar %}
+              {% thumbnail new_avatar "150x150" crop="center" as im %}
+                <img id="user-avatar" src="{{ im.url }}" class="user-avatar responsive-img" style="height: {{ im.height }}px; width: {{ im.width }}px">
+                <a id="del-avatar" href="#!" class="btn red" style="position: absolute; left: 0"><i class="material-icons white-text right">delete</i> پاک کردن عکس</a>
+              {% endthumbnail %}
+            {% else %}
+              <img src="{{ DEFAULT_USER_AVATAR }}" class="responsive-img" style="border-radius: 50%; border: 4px solid #009688; height: 150px; width: 150px">
+            {% endif %}
+          </div>
+          <form method="post" enctype="multipart/form-data">
+            {% crispy form %}
+            {% csrf_token %}
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>        
+{% endblock content %}
+
+
+
+{% block js %}{{ block.super }}
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('select').formSelect();
+      $('textarea').removeClass('textarea').addClass('materialize-textarea');
+      $('#id_del_avatar').prop('required', false)
+      // delete user avatar
+      $('#del-avatar').on('click', function(){
+        $.get({
+          url: '{% url "app-api:del-avatar" %}',
+          success: function (data) {
+            if (data['message']) {
+              M.toast({html: '<i class="material-icons green-text">check</i> &nbsp;' + data['message']});
+              $('#user-avatar').attr('src', '/static/img/default-user.jpg');
+              $('#del-avatar').fadeOut();
+            } else {
+              M.toast({html: '<i class="material-icons orange-text">warning</i> &nbsp; ' + data['warning']});
+            }
+          },
+          error: function(a, b, c, d){
+            M.toast({html: '<i class="material-icons red-text">error</i> &nbsp; اوه! یه مشکلی پیش اومده...'})
+          }
+        });
+      })
+    });
+  </script>
+{% endblock js %}
+

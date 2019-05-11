@@ -1,0 +1,431 @@
+{% extends "base.html" %}
+{% load static %}
+{% load thumbnail %}
+{% load social_tags %}
+{% load custom_tags %}
+ 
+{% block breadcrumb %}
+  <nav class="breadcrumb-nav">
+    <div class="nav-wrapper teal">
+      <div class="col valign-wrapper">
+        <a href="/" class="breadcrumb">خانه</a>
+        <a href="{{ session.course.get_absolute_url }}" class="breadcrumb">{{ session.course.title }}</a>
+        <a href="{{ session.get_absolute_url }}">{{ session.title }}</a>
+      </div>
+    </div>
+  </nav>
+{% endblock breadcrumb %}
+
+{% block content %}
+  <div class="container">
+    <div class="section">
+      {% with session as obj %}
+        {% include 'components/sharing.html' %}
+      {% endwith %}
+      <div class="row">
+        <div class="col m2 action-icons hide-on-small-only">
+          <i class="material-icons left bookmark {% if session|is_booked:request.user %}orange-text{% else %}black-text{% endif %}" data-id="{{ session.id }}" data-type="CourseSession" style="margin-top: 40px">{% if session|is_booked:request.user %}bookmark{% else %}bookmark_border{% endif %}</i>
+          <a class="modal-trigger" href="#sharing-modal-{{ session.id }}"><i class="material-icons left share" style="margin-top: 40px">share</i></a>
+          <i class="material-icons left like {% if session|is_liked:request.user %}red-text{% else %}black-text{% endif %}" data-id="{{ session.id }}" data-type="CourseSession" style="margin-top: 40px">{% if session|is_liked:request.user %}favorite{% else %}favorite_border{% endif %}</i>
+        </div>
+        <div class="col m10 s12">
+          <h2>{{ session.course.title }} - {{ session.title }}</h2>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="valign-wrapper">
+          <div class="col m1 hide-on-small-only">
+            <a class="btn tooltipped {% if not session.next_session %}disabled{% endif %}" data-position="top" data-tooltip="قسمت بعدی" href="{{ session.next_session.get_absolute_url }}">
+              <i class="material-icons">navigate_next</i>
+            </a>
+          </div>
+          <div class="col m10 s12">
+            {% if session.aparat_video %}
+              {{ session.aparat_video|safe }}
+            {% elif session.video %}
+              <video width="100%" controls>
+                <source src="{{ session.video.url }}" type="video/mp4">
+                ظاهرا مرورگر شما خیلی خیلی قدیمی شده! لطفا یه مرورگر جدیدتر نصب کن!
+              </video>
+            {% else %}
+              <h3 class="center red-text">اون! ظاهرا یه مشکلی پیش اومده... لطفا به محمدرضا اطلاع بدید.</h3>
+            {% endif %}  
+            
+          </div>
+          <div class="col m1 hide-on-small-only">
+            <a class="btn tooltipped {% if not session.prev_session %}disabled{% endif %}" data-position="top" data-tooltip="قسمت قبلی" href="{{ session.prev_session.get_absolute_url }}">
+              <i class="material-icons">navigate_before</i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <ul class="tabs tabs-with-comments tabs-fixed-width">
+        <li class="tab col s3"><a class="teal-text" href="#description">شرح این قسمت</a></li>
+        <li id="comments-tab" class="tab col s3" data-showed="true"><a class="teal-text" href="#comments">نظرات</a></li>
+      </ul>
+      <div id="description" class="col s12">
+        <div class="row hide-on-med-and-up">
+          <div class="fixed-action-btn">
+            <a class="btn-floating btn-large blue">
+              <i class="large material-icons">menu</i>
+            </a>
+            <ul>
+              <li><a class="btn-floating orange"><i class="material-icons">comment</i></a></li>
+              <li>
+                <a class="btn-floating btn tooltipped" data-position="top" data-tooltip="قسمت قبلی" href="#!">
+                  <i class="material-icons">navigate_before</i>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating btn tooltipped" data-position="top" data-tooltip="قسمت بعدی" href="#!">
+                  <i class="material-icons">navigate_next</i>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating btn white" href="#!">
+                  <i class="material-icons left bookmark orange-text text-darken-2">bookmark_border</i>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating btn white" href="#!">
+                  <i class="material-icons left like pink-text text-darken-1">favorite_border</i>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating btn white" href="#!">
+                  <i class="material-icons left share blue-text">share</i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col m12">
+            <div class="card-panel">
+              {% if session.price == 0 %}
+                <span class="badge teal left white-text">رایگان</span>
+              {% else %}
+                <span class="badge orange left white-text">{{ session.price }} تومان</span>
+              {% endif %}
+              <h2 style="margin: 0">توضیحات این قسمت</h2>
+              <p>{{ session.description|safe }}</p>
+
+              {% if session in request.user.profile.registered_items %}
+                <a href="#!" class="btn disabled">شما قبلا روی این قسمت سرمایه گذاری کرده اید.</a>
+              {% elif session.price == 0 %}
+                <a class="btn" href="{% url 'app-base:register-course' item_id=session.id item_type='CourseSession' %}">سرمایه گذاری روی این قسمت</a>
+              {% else %}
+                <a href="#register-modal" class="btn modal-trigger">این قسمت رو میخوام!</a>
+                <!-- Modal Structure -->
+                <div id="register-modal" class="modal">
+                  <div class="modal-content">
+                    <h4>این دوره رایگان نیست!</h4>
+                    <p>در صورت تمایل به شرکت در این دوره لطفا به میزان مشخص شده روی خود سرمایه گذاری کنید. در صورت تمایل به سرمایه گذاری روی خودتان روی دکمه پرداخت کلیک کنید!</p>
+                    <h3 class="center teal-text">سرمایه گذاری: <strong>{{ session.price }} تومان</strong></h3>
+                  </div>
+                  <div class="modal-footer">
+                    {# {% url 'app-base:register-course' item_id=course.id item_type='Course' %} #}
+                    <a href="{% url 'app-base:payment' item_id=session.id item_type='CourseSession' %}" class="modal-close waves-effect waves-green btn-flat">پرداخت</a>
+                  </div>
+                </div>
+              {% endif %}
+
+            </div>
+          </div>
+        </div>
+
+        {% with attachments as session.attachment_files.all %}
+          {% if attachments %}
+            <div class="row">
+              <div class="card-panel">
+                  <h2 style="margin: 0; margin-bottom: 15px">فایل های مرتبط با این قسمت</h2>
+                  <div class="row">
+                    {% for attachment in attachments %}
+                    <div class="col m4 s12 center">
+                      <a href="{{ attachment.file.url }}">
+                        <div class="card-panel {{ attachment.color }} white-text">
+                          <span class="attachment-files valign-wrapper ltr file-title">{{ attachment.title|truncatechars:43 }}</span>
+                        </div>
+                      </a>
+                    </div>
+                    {% endfor %}
+                  </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        {% with session.coursesessionexercise_set.all as exercises %}
+          {% if exercises %}
+            <div class="row">
+              <div class="col s12">
+                <h3><span class="solve-exercises">حل تمرین های این قسمت</span></h3>
+                    
+                {% for ex in exercises %}
+                    <div class="card-panel">
+                      <div class="">
+                        <a href="{{ ex.get_absolute_url }}">
+                          <i class="material-icons left">code</i> {{ session }} - {{ ex }}
+                        </a>
+                      </div>
+                    </div>            
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+        {% endwith %}
+      </div>
+      <div id="comments" class="col s12">
+        <div class="section">
+          <div class="row">
+              <div id="svgContainer"></div>
+              <div id="comments-container" class="col s12" style="display: none;">
+              </div>
+                  
+
+          
+            {% with session as obj %}
+            {% include "components/comment.html" %}
+            {% endwith %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}
+
+{% block js %}
+  {{ block.super }}
+  <script src="{% static 'js/player/lottie.min.js' %}" type="text/javascript"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('.tooltipped').tooltip();
+
+      $('.fixed-action-btn').floatingActionButton();
+
+      /* Shapes */
+      var svgContainer = document.getElementById('svgContainer');
+      var animItem = bodymovin.loadAnimation({
+        wrapper: svgContainer,
+        animType: 'svg',
+        loop: true,
+        path: '{% static "preloader.json" %}'
+      });
+
+      $('.tabs-with-comments').tabs({
+        onShow: function(){
+          if ($('#comments-tab').data('showed') == true) {
+            $.get({
+              url: '{% url "app-api:comment-list" %}?id={{ session.id }}&type={{ session|get_type }}',
+              success: function (data) {
+                $.each(data, function(){
+                  avatar = $(this)[0]['avatar']
+                  value = $(this)[0]['value']
+                  main_jcreate_datetime = $(this)[0]['jcreate_datetime']
+                  main_com_id = $(this)[0]['id']
+                  user_full_name = $(this)[0]['user_full_name']
+                  main_com_likes = $(this)[0]['likes']
+                  main_com_dilikes = $(this)[0]['dilikes'] * -1
+                  dislike_color = $(this)[0]['is_liked'] == -1 ? 'red-text text-lighten-2' : 'grey-text text-lighten-1'
+                  like_color = $(this)[0]['is_liked'] == 1 ? 'blue-text text-lighten-2' : 'grey-text text-lighten-1'
+                  com = `<div class="col s12">
+                          <div class="card-panel thin-card" style="position: relative">
+                            <span class="left grey-text text-lighten-1" style="position: absolute; bottom: 10px; left:30px; direction: ltr;">${main_jcreate_datetime}</span>
+                            <div class="row">
+                              <div class="valign-wrapper">
+                                <div class="col m2 hide-on-small-only center">
+                                  <img src="${avatar}" class="responsive-img avatar-in-comment">
+                                  <div style="font-family: vazir-thin; font-size:12px">${user_full_name}</div>
+                                </div>
+                                <div class="col m10 s12">
+                                  <span class="comment-action">
+                                    <a id="dilike-com-${main_com_id}" data-comment-id="${main_com_id}" data-value="-1" class="left ${dislike_color} tooltipped" data-position="top" data-tooltip="مخالفم" href="#!">
+                                      <i class="material-icons">thumb_down</i>
+                                      <span class="dilikes-count">${main_com_dilikes}</span>
+                                    </a>
+                                    <a id="like-com-${main_com_id}" data-comment-id="${main_com_id}" data-value="1" class="left ${like_color} tooltipped" data-position="top" data-tooltip="موافقم" href="#!">
+                                      <span class="likes-count">${main_com_likes}</span>
+                                      <i class="material-icons">thumb_up</i>
+                                    </a>
+                                    <a class="left grey-text text-lighten-1 tooltipped modal-trigger" data-position="top" data-tooltip="پاسخ به این نظر" href="#modal${main_com_id}"><i class="material-icons">reply</i></a>
+
+
+                                      <!-- Modal Structure -->
+                                      <div id="modal${main_com_id}" class="modal">
+                                        <div class="modal-content">
+                                          <h4>پاسخ به نظر ${user_full_name}</h4>
+                                          <div class="row">
+                                            <div class="input-field comment-input-field col s12">
+                                              <textarea id="reply-val-${main_com_id}" class="materialize-textarea"></textarea>
+                                              <label for="reply-val-${main_com_id}">نظر خود را اینجا بنویسید...</label>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                          <a href="#!" data-id="${main_com_id}" data-type="Comment" id="submit-reply-${main_com_id}" class="modal-close waves-effect waves-green btn-flat">ثبت</a>
+                                        </div>
+                                      </div>
+
+
+                                  </span>
+
+
+
+                                  <div class="hide-on-med-and-up">
+                                    نظر از
+                                    <b>
+                                      <span style="font-family: vazir-thin; font-size:12px">${user_full_name}</span>
+                                    </b>
+                                  </div>
+                                  <p>${value}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>`
+                    $.each($(this)[0]['replies'], function(){
+                      avatar = $(this)[0]['avatar']
+                      value = $(this)[0]['value']
+                      reply_com_id = $(this)[0]['id']
+                      jcreate_datetime = $(this)[0]['jcreate_datetime']
+                      user_full_name = $(this)[0]['user_full_name']
+                      reply_com_likes = $(this)[0]['likes']
+                      reply_com_dilikes = $(this)[0]['dilikes'] * -1
+                      dislike_color = $(this)[0]['is_liked'] == -1 ? 'red-text text-lighten-2' : 'grey-text text-lighten-1'
+                      like_color = $(this)[0]['is_liked'] == 1 ? 'blue-text text-lighten-2' : 'grey-text text-lighten-1'
+                      replies_com = `<div class="col s11">
+                                      <div class="card-panel thin-card" style="position: relative">
+                                        <span class="left grey-text text-lighten-1" style="position: absolute; bottom: 10px; left:30px; direction: ltr;">${jcreate_datetime}</span>
+
+                                        <div class="row">
+                                          <div class="valign-wrapper">
+                                            <div class="col m2 hide-on-small-only center">
+                                                <img src="${avatar}" class="responsive-img avatar-in-comment">
+                                              <div style="font-family: vazir-thin; font-size:12px">${user_full_name}</div>
+                                            </div>
+                                            <div class="col m10 s12">
+                                              <span class="comment-action">
+                                                <a id="dilike-com-${reply_com_id}" data-comment-id="${reply_com_id}" data-value="-1" class="left ${dislike_color} tooltipped" data-position="top" data-tooltip="مخالفم" href="#!">
+                                                  <i class="material-icons">thumb_down</i>
+                                                  <span class="dilikes-count">${reply_com_dilikes}</span>
+                                                </a>
+                                                <a id="like-com-${reply_com_id}" data-comment-id="${reply_com_id}" data-value="1" class="left ${like_color} tooltipped" data-position="top" data-tooltip="موافقم" href="#!">
+                                                  <span class="likes-count">${reply_com_likes}</span>
+                                                  <i class="material-icons">thumb_up</i>
+                                                </a>
+                                              </span>
+                                              <div class="hide-on-med-and-up">
+                                                نظر از
+                                                <b>
+                                                  <span style="font-family: vazir-thin; font-size:12px">${user_full_name}</span>
+                                                </b>
+                                              </div>
+                                              <p>${value}</p>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>`
+                      com += replies_com
+                    });
+                    $('#comments-container').append(com);
+                    $('#svgContainer').fadeOut(300, function(){
+                      $('#comments-container').fadeIn(300)
+                    });
+                });
+              if (data.length == 0 || data.length == undefined){
+                $('#comments-container').append(`
+                  <div class="card-panel center">
+                  <h3 class="blue-text">هنوز نظر در این قسمت ثبت نشده!</h3>
+                  <h4 class="yellow-text text-darken-3">اولین نفری باشید که نظر میده</h4>
+                  </div>
+                `)
+                $('#svgContainer').fadeOut(300, function(){
+                  $('#comments-container').fadeIn(300)
+                });
+              }
+              $('.tooltipped').tooltip();
+              $('.modal').modal();
+              $('[id^="submit-reply-"]').on('click', function(){
+                input_num = $($('[id^="submit-reply-"]')[0]).attr('id').split('-')[2]
+                comment = $('#reply-val-' + input_num).val()
+                // send a reply
+                $.post({
+                  url: '{% url "app-api:comment" %}',
+                  headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                  data: {
+                    'id': $(this).data('id'),
+                    'type': $(this).data('type'),
+                    'value': comment,
+                  },
+                  success: function (data) {
+                    if (data['warning']) {
+                      M.toast({html: '<i class="material-icons yellow-text">warning</i> &nbsp;' + data['warning']});
+                    } else {
+                      if (data['message']) {
+                        M.toast({html: '<i class="material-icons green-text">check</i> &nbsp;' + data['message']});
+                      } else {
+                        M.toast({html: '<i class="material-icons orange-text">warning</i> &nbsp; برای نشانه گذاری، لطفا ثبت نام کن یا وارد سایت شو!'});
+                      }
+                      $('[id^="reply-val-"]').val('')
+                    }
+                  },
+                  error: function(a, b, c, d){
+                    M.toast({html: '<i class="material-icons red-text">error</i> &nbsp; اوه! یه مشکلی پیش اومده...'})
+                  }
+                });
+              });
+              $('#comments-tab').data('showed', false);
+              // like or dislike a comment
+              $('[id*="like-com-"]').on('click', function(){
+                elem = $(this)
+                $.post({
+                  url: '{% url "app-api:comment-like" %}',
+                  headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                  data: {
+                    'comment_id': $(this).data('comment-id'),
+                    'value': $(this).data('value')
+                  },
+                  success: function (data) {
+                    if (data['warning']) {
+                      M.toast({html: '<i class="material-icons yellow-text">warning</i> &nbsp;' + data['warning']});
+                    } else {
+                      if (data['message']) {
+                        M.toast({html: '<i class="material-icons green-text">check</i> &nbsp;' + data['message']});
+                        console.log($(elem))
+                        if ('di' == $(elem).attr('id').slice(0, 2)) {
+                          $(elem).removeClass('grey-text text-lighten-1').addClass('red-text text-lighten-2');
+                        } else {
+                          $(elem).removeClass('grey-text text-lighten-1').addClass('blue-text text-lighten-2');
+                        }
+                        // update count
+                        new_var = parseInt($(elem).find('span').text()) + 1
+                        $(elem).find('span').text(new_var)
+                      } else {
+                        M.toast({html: '<i class="material-icons orange-text">warning</i> &nbsp; برای نشانه گذاری، لطفا ثبت نام کن یا وارد سایت شو!'});
+                      }
+                      $('[id^="reply-val-"]').val('')
+                    }
+                  },
+                  error: function(a, b, c, d){
+                    M.toast({html: '<i class="material-icons red-text">error</i> &nbsp; اوه! یه مشکلی پیش اومده...'})
+                  }
+                })
+              });
+              },
+              error: function(a, b, c, d){
+                M.toast({html: '<i class="material-icons red-text">error</i> &nbsp; اوه! یه مشکلی پیش اومده...'})
+              }
+            });
+          }
+        }
+      });
+    });
+  </script>
+{% endblock js %}

@@ -1,0 +1,12 @@
+{% extends "student-dashboard.html" %}
+
+{% block content %}{{ block.super }}
+    <div class="container">
+        <div class="row">
+            <h2>تنظیمات</h2>
+            <div class="card-panel">
+                {{ form.as_p }}
+            </div>
+        </div>
+    </div>
+{% endblock content %}

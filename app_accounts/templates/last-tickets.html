@@ -1,0 +1,44 @@
+{% extends "student-dashboard.html" %}
+
+{% block content %}{{ block.super }}
+<div class="container-fluid">
+    <h2>آخرین تیکت ها</h2>
+    <div class="card-panel">
+      {% if request.user.is_superuser %}
+        <table>
+          <thead>
+            <tr>
+                <th class="right-align">موضوع</th>
+                <th class="right-align">قسمتی از متن</th>
+                <th class="center-align">تاریخ ارسال</th>
+                <th class="center-align">وضعیت</th>
+                <th class="center-align">دیده شدن</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ticket in page.object_list %}
+                <tr>
+                  <td class="right-align"><a href="{{ ticket.get_absolute_url }}">{{ ticket.user }}</a></td>
+                  <td class="right-align">{{ ticket.topic|truncatechars:20 }}</td>
+                  <td class="center-align">{{ ticket.jd_create_datetime }}</td>
+                  <td class="center-align"><span class="badge {{ ticket.status_color }} white-text">{{ ticket.status }}</span></td>
+                  <td class="center-align"><span class="badge {{ ticket.chats.last.status_color }} white-text">{{ ticket.chats.last.status }}</span></td>
+                </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+    </div>
+    <div id="default-search-btns" class="center">
+        صفحه {{ page_num }} از {{ num_pages }}
+        <br>
+        {% if page.has_next %}
+          <a href="?page={{ page.next_page_number }}" class="btn">بعدی <i class="material-icons right">navigate_next</i></a>
+        {% endif %}
+        {% if page.has_previous %}
+          <a href="?page={{ page.previous_page_number }}" class="btn">قبلی <i class="material-icons left">navigate_before</i></a>
+        {% endif %}
+      </div>
+      <br>
+</div>
+{% endblock content %}

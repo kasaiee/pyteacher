@@ -1,0 +1,21 @@
+{% extends "student-dashboard.html" %}
+
+{% block content %}
+    {{ block.super }}
+    <div class="container" style="width: 90%">
+        <h2>موارد ذخیره شده</h2>
+        <div class="section">
+          <dir class="row" style="padding: 0">
+              {% for obj in items %}
+                <div class="col m4 s12 right">
+                  {% include "card.html" %}
+                </div>
+              {% empty %}
+              <div class="card-panel">
+                <h3 class="pink-text center">هیچ مورد ذخیره شده ای ندارید!</h3>
+              </div>
+              {% endfor %}
+          </dir>
+        </div>
+      </div>
+{% endblock content %}

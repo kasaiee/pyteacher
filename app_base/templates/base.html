@@ -1,0 +1,238 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>PyTeacher.ir</title>
+
+  {% block css %}
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="{% static 'css/materialize.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+
+  <style type="text/css">
+    @font-face {
+      font-family: vazir-thin;
+      src: url({% static "/font/vazir-font-v19.1.0/Farsi-Digits/Vazir-Thin-FD.woff" %});
+    }
+    @font-face {
+      font-family: vazir-medium;
+      src: url({% static "font/vazir-font-v19.1.0/Farsi-Digits/Vazir-Medium-FD.woff" %});
+    }
+    @font-face {
+      font-family: vazir-bold;
+      src: url({% static "font/vazir-font-v19.1.0/Farsi-Digits/Vazir-Bold-FD.woff" %});
+    }
+    @font-face {
+      font-family: Vazir Code;
+      src: url('{% static "font/vazir-code-font-v1.1.1/Vazir-Code.eot" %}');
+      src: url('{% static "font/vazir-code-font-v1.1.1/Vazir-Code.eot" %}?#iefix') format('embedded-opentype'),
+           url('{% static "font/vazir-code-font-v1.1.1/Vazir-Code.woff" %}') format('woff'),
+           url('{% static "font/vazir-code-font-v1.1.1/Vazir-Code.ttf" %}') format('truetype');
+      font-weight: normal;
+    }
+
+    @font-face {
+      font-family: Vazir Code Hack;
+      src: url('{% static "font/vazir-code-font-v1.1.1/Vazir-Code-Hack.eot" %}');
+      src: url('{% static "font/vazir-code-font-v1.1.1/Vazir-Code-Hack.eot?#iefix') format('embedded-opentype" %}'),
+           url('{% static "font/vazir-code-font-v1.1.1/Vazir-Code-Hack.woff" %}') format('woff'),
+           url('{% static "font/vazir-code-font-v1.1.1/Vazir-Code-Hack.ttf" %}') format('truetype');
+      font-weight: normal;
+    }
+  </style>
+  <link href="{% static 'css/style.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+  {% endblock css %}
+</head>
+<body>
+  <main>
+    <nav class="white" role="navigation">
+      <div class="nav-wrapper container ltr">
+        <a id="logo-container" href="#" class="brand-logo">PyTeacher</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="{% url 'app-accounts:profile' %}">{% if request.user.is_authenticated %}پروفایل{% else %}ورود / ثبت نام{% endif %}</a></li>
+          <li><a href="{% url 'app-base:home' %}">خانه</a></li>
+          }
+          }
+        </ul>
+
+        <ul id="nav-mobile" class="sidenav">
+          <li>
+            <a href="{% url 'app-base:home' %}">
+              <i class="material-icons right">home</i>خانه
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'app-accounts:profile' %}">
+              <i class="material-icons right">person</i>{% if request.user.is_authenticated %}پروفایل{% else %}ورود / ثبت نام{% endif %}
+              }
+              }
+            </a>
+          </li>
+        </ul>
+        <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+      </div>
+    </nav>
+
+    {% block breadcrumb %}{% endblock breadcrumb %}
+
+    {% block content %}{% endblock content %}
+  </main>
+
+  <footer class="page-footer teal">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">درباره پای تیچر</h5>
+          <p class="grey-text text-lighten-4">پای‌تیچر مخفف PYTHON TEACHER است! سعی کردم در این سایت با استفاده از تجربه های شخصی ام در پروژه هایی که انجام دادم، شما را با چالش های واقعی موجود در هر پروژه آشنا کنم. لطفا با حمایت های خود، مرا در این امر تشویق نمایید. به خصوص حتما در توسعه این سایت در گیتهاب من مشارکت داشته باشید.</p>
+
+
+        </div>
+        <div class="col l3 s12">
+          <h5 class="white-text">مطالب سایت</h5>
+          <ul>
+            <li><a class="white-text" href="#!">آخرین مقالات</a></li>
+            <li><a class="white-text" href="#!">آخرین ویدئو ها</a></li>
+            <li><a class="white-text" href="#!">دوره های آنلاین</a></li>
+            <li><a class="white-text" href="#!">دوره های حضوری</a></li>
+          </ul>
+        </div>
+        <div class="col l3 s12">
+          <h5 class="white-text">لینک های مفید</h5>
+          <ul>
+            {% if request.user.is_authenticated %}
+            <li><a class="white-text" href="{% url 'logout' %}">خروج</a></li>
+            {% else %}
+            <li><a class="white-text" href="{% url 'login' %}">ورود</a></li>
+            <li><a class="white-text" href="#!">عضویت</a></li>
+            {% endif %}
+            <li><a class="white-text modal-trigger" href="#about-me">درباره من</a></li>
+            <li><a class="white-text modal-trigger" href="#contact-me">ارتباط با من</a></li>
+            <!-- Modal Structure -->
+            <div id="about-me" class="modal">
+              <div class="modal-content black-text">
+                <h4>محمدرضا کیه؟</h4>
+                <p>یکی که پایتون درس میده!</p>
+              </div>
+              <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">بستن</a>
+              </div>
+            </div>
+            <!-- Modal Structure -->
+            <div id="contact-me" class="modal">
+              <div class="modal-content black-text">
+                <h4>ارتباط با محمدرضا</h4>
+                <p>برای ارتباط با من لازمه که اول لاگین کنی!</p>
+                <p>بعد از اینکه لاگین کردی، برو توی پروفایلت و از قسمت «ارتباط با محمدرضا» میتونی هرچی میخوای به من بگی!</p>
+              </div>
+              <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">بستن</a>
+              </div>
+            </div>
+
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      ساخته شده توسط <a class="brown-text text-lighten-3" href="http://materializecss.com">محمدرضا کسائی</a>
+      </div>
+    </div>
+  </footer>
+
+
+  {% block js %}
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="{% static 'js/materialize.min.js' %}"></script>
+  <script src="{% static 'js/init.js' %}"></script>
+  {% include "social.js.html" %}
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('.sidenav').sidenav({edge: 'right'});
+
+      $('.bookmark').on('click', function(){
+        if ($(this).text() == 'bookmark') {
+          $(this).text('bookmark_border');
+          $(this).addClass('black-text').removeClass('orange-text')
+        } else {
+          $(this).text('bookmark');
+          $(this).addClass('orange-text').removeClass('black-text')
+        }
+        $.post({
+          url: '{% url "app-api:bookmark" %}',
+          headers: {'X-CSRFToken': '{{ csrf_token }}'},
+          data: {
+            'id': $(this).data('id'),
+            'type': $(this).data('type'),
+          },
+          success: function (data) {
+            if (data['message']) {
+              M.toast({html: '<i class="material-icons green-text">check</i> &nbsp;' + data['message']});
+            } else {
+              M.toast({html: '<i class="material-icons orange-text">warning</i> &nbsp; برای نشانه گذاری، لطفا ثبت نام کن یا وارد سایت شو!'});
+            }
+          },
+          error: function(a, b, c, d){
+            M.toast({html: '<i class="material-icons red-text">error</i> &nbsp; اوه! یه مشکلی پیش اومده...'})
+          }
+        });
+      });
+
+      $('.like').on('click', function(){
+        if ($(this).text() == 'favorite') {
+          $(this).text('favorite_border');
+          $(this).addClass('black-text').removeClass('red-text')
+        } else {
+          $(this).text('favorite');
+          $(this).addClass('red-text').removeClass('black-text')
+        }
+        $.post({
+          url: '{% url "app-api:like" %}',
+          headers: {'X-CSRFToken': '{{ csrf_token }}'},
+          data: {
+            'id': $(this).data('id'),
+            'type': $(this).data('type'),
+          },
+          success: function (data) {
+            if (data['message']) {
+              M.toast({html: '<i class="material-icons green-text">check</i> &nbsp;' + data['message']})
+            } else {
+              M.toast({html: '<i class="material-icons orange-text">warning</i> &nbsp; برای لایک کردن، لطفا ثبت نام کن یا وارد سایت شو!'})
+            }
+          },
+          error: function(a, b, c, d){
+            M.toast({html: '<i class="material-icons red-text">error</i> &nbsp; اوه! یه مشکلی پیش اومده...'})
+          }
+        });
+
+      });
+
+      $('.share').on('click', function(){
+        $(this).css('color', '#2196f3')
+      });
+    })
+    {% if messages %}
+      {% for message in messages %}
+        var toastHTML = `
+          <button class="btn-flat toast-action">
+          {% if message.tags == 'success' %}
+            <i class="material-icons green-text">check</i>
+          {% elif message.tags == 'error' %}
+            <i class="material-icons red-text">info_outline</i>
+          {% else %}
+            <i class="material-icons">info_outline</i>
+          {% endif %}
+          </button>
+          {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}توجه: {% endif %}
+          {{ message }}`;
+        M.toast({html: toastHTML, displayLength: 7000});
+      {% endfor %}
+    {% endif %}
+  </script>
+  {% endblock js %}
+
+  </body>
+</html>

@@ -1,0 +1,24 @@
+{% extends "student-dashboard.html" %}
+
+{% block content %}
+    {{ block.super }}
+    <div class="container" style="width: 90%">
+        <h2>مواردی که ثبت نام کردم</h2>
+        <div class="section">
+          <dir class="row" style="padding: 0">
+              {% for obj in registered_items %}
+                
+                  <div class="col m4 s12 right">
+                    {% include "card.html" %}
+                  </div>
+                
+              {% empty %}
+              <div class="card-panel">
+                <h3 class="blue-text center">هنوز تو هیچ دوره ای ثبت نام نکردی!</h3>
+                <h4 class="yellow-text text-darken-3 center">میتوی به <a href="/#last-courses">جدید ترین دوره های من</a> یه نگاهی بندازی</h4>
+              </div>
+              {% endfor %}
+          </dir>
+        </div>
+      </div>
+{% endblock content %}

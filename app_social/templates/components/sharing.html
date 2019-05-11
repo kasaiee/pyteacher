@@ -1,0 +1,20 @@
+{% load social_share %}
+
+<script src="https://use.fontawesome.com/3feaf93d34.js"></script>
+
+  <!-- Modal Structure -->
+  <div id="sharing-modal-{{ obj.id }}" class="modal">
+    <div class="modal-content center">
+      <h4>اشتراک گذاری!!</h4>
+        <span>{% post_to_linkedin obj.title obj.get_absolute_url '<i class="fa fa-linkedin"></i>' %}</span>
+        <span>{% post_to_facebook obj.get_absolute_url '<i class="fa fa-facebook"></i>' %}</span>
+        <span>{% post_to_gplus obj.get_absolute_url '<i class="fa fa-google-plus red-text"></i>' %}</span>
+        <span>{% post_to_twitter obj.title obj.get_absolute_url '<i class="fa fa-twitter"></i>' %}</span>
+        <span>{% send_email obj.title obj.description|safe obj.get_absolute_url '<i class="fa fa-envelope teal-text"></i>' %}</span>
+        <span>{% post_to_telegram obj.title obj.get_absolute_url '<i class="fa fa-telegram blue-text"></i>' %}</span>
+        <span><a href="whatsapp://send?text={{ obj.get_absolute_url }} - {{ obj.title }}" data-action="share/whatsapp/share"><i class="fa fa-whatsapp green-text"></i></a></span>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">بستن</a>
+    </div>
+  </div>

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+
+{% block css %}
+  {{ block.super }}
+  <style type="text/css">
+    header, main, footer {
+      padding-right: 300px;
+    }
+
+    @media only screen and (max-width : 992px) {
+      header, main, footer {
+        padding-right: 0;
+      }
+    }
+    .sidenav.sidenav-fixed.right {
+      right: 0;
+      padding-right: 0;
+    }
+  </style>
+{% endblock css %}
+
+{% block content %}
+    {% block profile_sidenav %}
+    <ul id="slide-out" class="sidenav sidenav-fixed right">
+      <li><div class="user-view">
+        <div class="background">
+          <img src="http://materializecss.com/images/office.jpg">
+        </div>
+        <a href="{% url 'app-accounts:edit-profile' %}">
+          {% if request.user.profile.avatar %}
+            {% thumbnail request.user.profile.avatar "150x150" crop="center" as im %}
+              <img class="circle responsive-img" src="{{ im.url }}">
+            {% endthumbnail %}
+          {% else %}
+            <img src="{{ DEFAULT_USER_AVATAR }}" class="responsive-img circle" style="border-radius: 50%; border: 4px solid #009688;">
+          {% endif %}
+          </a>
+        <a href="{% url 'app-accounts:edit-profile' %}"><span class="white-text name">{{ request.user.username }}</span></a>
+        <a href="{% url 'app-accounts:edit-profile' %}"><span class="white-text email">{{ request.user.email }}</span></a>
+      </div></li>
+      <li><a class="waves-effect" href="{% url 'app-accounts:booked-items' %}"><i class="material-icons right">bookmark</i>موارد ذخیره شده</a></li>
+      <li><a class="waves-effect" href="{% url 'app-accounts:registered-items' %}"><i class="material-icons right">school</i>دوره های من</a></li>
+      <li><a class="waves-effect" href="{% url 'app-accounts:ticket-list' %}"><i class="material-icons right">comment</i>ارتباط با محمدرضا</a></li>
+      <li><a class="waves-effect" href="#!"><i class="material-icons right">pie_chart_outlined</i>وضعیت تحصیلی من</a></li>
+      
+      {% if request.user.is_superuser %}
+      <li><a class="waves-effect" href="{% url 'app-accounts:last-ex' %}"><i class="material-icons right">code</i>تمرین ها</a></li>
+      <li><a class="waves-effect" href="{% url 'app-accounts:last-tickets' %}"><i class="material-icons right">contact_mail</i>تیکت ها</a></li>
+      {% endif %}
+      
+      <li><div class="divider"></div></li>
+      <li><a class="waves-effect" href="{% url 'app-accounts:edit-profile' %}"><i class="material-icons right">person</i>پروفایل</a></li>
+      {# <li><a class="waves-effect" href="{% url 'app-accounts:settings' %}"><i class="material-icons right">settings</i>تنظیمات</a></li> #}
+    </ul>
+    {% endblock profile_sidenav %}
+
+{% endblock content %}
+
+{% block js %}
+  {{ block.super }}
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('.sidenav').sidenav({edge: 'right'});
+    });
+  </script>
+{% endblock js %}
+

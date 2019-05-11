@@ -1,0 +1,29 @@
+<script type="text/javascript">
+  $('#submit-comment').on('click', function(){
+    comment = $('#comment-val').val()
+    $.post({
+      url: '{% url "app-api:comment" %}',
+      headers: {'X-CSRFToken': '{{ csrf_token }}'},
+      data: {
+        'id': $(this).data('id'),
+        'type': $(this).data('type'),
+        'value': comment,
+      },
+      success: function (data) {
+        if (data['warning']) {
+          M.toast({html: '<i class="material-icons yellow-text">warning</i> &nbsp;' + data['warning']});
+        } else {
+          if (data['message']) {
+            M.toast({html: '<i class="material-icons green-text">check</i> &nbsp;' + data['message']});
+          } else {
+            M.toast({html: '<i class="material-icons orange-text">warning</i> &nbsp; برای نشانه گذاری، لطفا ثبت نام کن یا وارد سایت شو!'});
+          }
+          $('#comment-val').val('')
+        }
+      },
+      error: function(a, b, c, d){
+        M.toast({html: '<i class="material-icons red-text">error</i> &nbsp; اوه! یه مشکلی پیش اومده...'})
+      }
+    });
+  });
+</script>

@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% load static %}
+
+{% block content %}
+  <div id="index-banner" class="parallax-container">
+    <div class="section no-pad-bot">
+      <div class="container">
+        <br><br>
+        <h1 class="header center teal-text text-lighten-2">آموزش کاربردی پایتون</h1>
+        <div class="row center">
+          <h4 style="line-height: 40px" class="header col s12 light">سلام!! اینجا سعی کردم پایتون و جنگو را به روش پروژه محور آموزش دهم</h4>
+        </div>
+        <div class="row center">
+          <a href="{% url 'login' %}" id="download-button" class="btn-large waves-effect waves-light teal lighten-1">ورود به سایت</a>
+        </div>
+        <br><br>
+
+      </div>
+    </div>
+    <div class="parallax"><img src="{% static 'background1.jpg' %}" alt="Unsplashed background img 1"></div>
+  </div>
+
+  <div class="container">
+    <div class="section">
+
+      <div class="row"> <!-- start of course row -->
+        <h2 id="last-courses">دوره های آنلاین</h2>
+        {% for obj in courses %}
+          <div class="col s12 m4">
+            {% include "card.html" %}
+          </div>
+        {% endfor %}
+
+      </div> <!-- end of course row -->
+        <a href="#!"><span class="more-course">دوره های بیشتر</span></a>
+        <br>
+        <br>
+    </div>
+  </div>
+
+  <div class="parallax-container valign-wrapper">
+    <div class="section no-pad-bot">
+      <div class="container">
+        <div class="row center">
+          <div class="col s12 m6">
+            <div class="input-field col s12">
+              <input id="email" type="text" class="validate">
+              <label for="email">ایمیل</label>
+            </div>
+            <div class="input-field col s12">
+              <input id="phone" type="text" class="validate">
+              <label for="phone">شماره همراه</label>
+            </div>
+            <button type="submit" class="btn right">ثبت</button>
+          </div>
+
+          <div class="col s12 m6">
+            <h2>عضویت در خبرنامه</h2>
+            <h3>برای اطلاع از آخرین آموزش ها و مقالات در خبرنامه عضو شوید!</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="parallax"><img src="{% static 'background2.jpg' %}" alt="Unsplashed background img 2"></div>
+  </div>
+
+  <div class="container">
+    <div class="section">
+
+      <div class="row">
+        <div class="col s12 m4">
+          <div class="card">
+            <div class="card-image">
+              <img src="http://materializecss.com/images/sample-1.jpg">
+              <a class="btn-floating halfway-fab"><img src="https://demos.creative-tim.com/rotating-css-card/images/rotating_card_profile2.png"></a>
+            </div>
+            <div class="card-content person-bio">
+              <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="card">
+            <div class="card-image">
+              <img src="http://materializecss.com/images/sample-1.jpg">
+              <a class="btn-floating halfway-fab"><img src="https://demos.creative-tim.com/rotating-css-card/images/rotating_card_profile2.png"></a>
+            </div>
+            <div class="card-content person-bio">
+              <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="card">
+            <div class="card-image">
+              <img src="http://materializecss.com/images/sample-1.jpg">
+              <a class="btn-floating halfway-fab"><img src="https://demos.creative-tim.com/rotating-css-card/images/rotating_card_profile2.png"></a>
+            </div>
+            <div class="card-content person-bio">
+              <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="parallax-container valign-wrapper">
+    <div class="section no-pad-bot">
+      <div class="container">
+        <div class="row center">
+          <h4 class="header col s12 light">این سایت هنوز کامل نشده و در دست ساخت است!</h4>
+        </div>
+      </div>
+    </div>
+    <div class="parallax"><img src="{% static 'background3.jpg' %}" alt="Unsplashed background img 3"></div>
+  </div>
+{% endblock content %}

@@ -1,0 +1,218 @@
+{% extends "student-dashboard.html" %}
+{% load static %}
+
+{% block css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+  <link rel="stylesheet" href="{% static 'codemirror-5.43.0/lib/codemirror.css' %}">
+  <link rel="stylesheet" href="{% static 'codemirror-5.43.0/addon/fold/foldgutter.css' %}">
+  <link rel="stylesheet" href="{% static 'codemirror-5.43.0/addon/dialog/dialog.css' %}">
+  <link rel="stylesheet" href="{% static 'codemirror-5.43.0/theme/monokai.css' %}">
+  <style type="text/css">
+    article.code * {
+      direction: ltr
+    }
+  </style>
+{% endblock css %}
+
+{% block content %}{{ block.super }}
+<div class="container-fluid">
+    <h2>{{ ticket.topic }}<span class="left grey-text" style="font-size: 16px">{{ ticket.jd_create_datetime }} <span id="top-status" class="badge {{ ticket.status_color }} white-text">{{ ticket.status }}</span></span></h2>
+
+    <div class="section">
+        <div class="card-panel">
+          {% for chat in ticket.chats.all %}
+            {% if chat.is_student %}
+              <div class="row">
+                <div class="col s11">
+                  <div class="card-panel light-blue lighten-5">
+                    {% if chat.code %}
+                        <article class="code code{{ forloop.counter }}"></article>
+                    {% endif %}
+                    <p>{{ chat.message }}</p>
+                    <hr>
+                    <div>{{ chat.jd_create_datetime }}<i id="msg-{{ chat.id }}" data-msg-num="{{ chat.id }}" data-seen="{{ chat.seen }}" class="material-icons right light-blue-text">{% if chat.seen %}done_all{% else %}check{% endif %}</i></div>
+                  </div>
+                </div>
+              </div>
+            {% else %}
+              <div class="row">
+                <div class="col s11 offset-s1">
+                  <div class="card-panel lime lighten-4">
+                    <article class="code code{{ forloop.counter }}"></article>
+                    <p>{{ chat.message }}</p>
+                    <hr>
+                    <div>{{ chat.jd_create_datetime }}<i id="msg-{{ chat.id }}" data-msg-num="{{ chat.id }}" data-seen="{{ chat.seen }}" class="material-icons right green-text text-lighten-2">{% if chat.seen %}done_all{% else %}check{% endif %}</i></div>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+      <div class="card-panel">
+          <h3 style="margin-top: 0">ارسال یه چت دیگه</h3>
+          <div class="row">
+            <div class="col s12">
+              <article class="code code-draft"></article>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field comment-input-field col s12">
+              <textarea id="textarea1" class="materialize-textarea"></textarea>
+              <label for="textarea1">توضیحات لازم در باره حل این تمرین را در اینجا بنویسید ...</label>
+              <button id="send-ticket" type="submit" class="btn">ارسال</button>
+              <a id="toggle-status-ticket" class="btn {% if ticket.closed %}blue{% else %}red{% endif %} left" href="#!"><i class="material-icons right">{% if ticket.closed %}check{% else %}close{% endif %}</i><span>{% if ticket.closed %}بازکردن این تیکت{% else %}بستن این تیکت{% endif %}</span></a>
+            </div>
+          </div>
+      </div>
+    </div>
+</div>
+{% endblock content %}
+
+
+{% block js %}{{ block.super }}
+    <!-- codemirror scripts -->
+    <script src="{% static 'codemirror-5.43.0/lib/codemirror.js' %}"></script>
+    <script src="{% static 'codemirror-5.43.0/addon/search/searchcursor.js' %}"></script>
+    <script src="{% static 'codemirror-5.43.0/addon/search/search.js' %}"></script>
+    <script src="{% static 'codemirror-5.43.0/addon/dialog/dialog.js' %}"></script>
+    <script src="{% static 'codemirror-5.43.0/addon/edit/matchbrackets.js' %}"></script>
+    <script src="{% static 'codemirror-5.43.0/addon/edit/closebrackets.js' %}"></script>
+    <script src="{% static 'codemirror-5.43.0/addon/comment/comment.js' %}"></script>
+    <script src="{% static 'codemirror-5.43.0/addon/wrap/hardwrap.js' %}"></script>
+    <script src="{% static 'codemirror-5.43.0/addon/fold/foldcode.js' %}"></script>
+    <script src="{% static 'codemirror-5.43.0/addon/fold/brace-fold.js' %}"></script>
+    <script src="{% static 'codemirror-5.43.0/mode/javascript/javascript.js' %}"></script>
+    <script src="{% static 'codemirror-5.43.0/keymap/sublime.js' %}"></script>
+    <script src="https://codemirror.net/mode/python/python.js"></script>
+  <script>
+    $(document).ready(function(){
+      $(window).scroll(function() {
+        $.each($('[id^="msg-"]'), function(){
+          var top_of_element = $(this).offset().top;
+          var bottom_of_element = $(this).offset().top + $(this).outerHeight();
+          var bottom_of_screen = $(window).scrollTop() + $(window).innerHeight();
+          var top_of_screen = $(window).scrollTop();
+
+          if ((bottom_of_screen > top_of_element) && (top_of_screen < bottom_of_element)){
+            if ($(this).data('seen') === 'False') {
+                msg_elem = $(this);
+                $.get(
+                  "{% url 'app-base:change-seen-status' %}",
+                  {'msg_id': $(this).data('msg-num')},
+                  function(data, status){
+                    console.log(data, status)
+                    if (status === 'success') {
+                      setTimeout(function() {
+                        msg_elem.addClass('animated heartBeat');
+                        msg_elem.text('done_all');
+                      }, 2000);
+                    }
+                });
+              $(this).data('seen', 'True');
+            }
+          }
+        });
+      });
+
+      $('#toggle-status-ticket').on('click', function(){
+        $.post({
+          url: '{% url "app-api:toggle-status-ticket" %}',
+          headers: {'X-CSRFToken': '{{ csrf_token }}'},
+          data: {
+            'ticket_id': '{{ ticket.id }}',
+          },
+          success: function (data) {
+            if (data['closed']) {
+              console.log($(this))
+              $('#toggle-status-ticket').removeClass('red').addClass('blue')
+              $('#top-status').removeClass('blue').addClass('red')
+              $('#top-status').text('بسته')
+              $('#toggle-status-ticket span').text('بازکردن این تیکت')
+              $('#toggle-status-ticket i').text('check')
+            } else {
+              $('#toggle-status-ticket').removeClass('blue').addClass('red')
+              $('#top-status').removeClass('red').addClass('blue')
+              $('#top-status').text('باز')
+              $('#toggle-status-ticket span').text('بستن این تیکت')
+              $('#toggle-status-ticket i').text('close')
+            }
+            if (data['message']) {
+              M.toast({html: '<i class="material-icons green-text">check</i> &nbsp;' + data['message']});
+            } else {
+              M.toast({html: '<i class="material-icons orange-text">warning</i> &nbsp; ' + data['warning']});
+            }
+          },
+          error: function(a, b, c, d){
+            M.toast({html: '<i class="material-icons red-text">error</i> &nbsp; اوه! یه مشکلی پیش اومده...'})
+          }
+        });
+      })
+
+      $('#send-ticket').on('click', function(){
+        res_array = []
+        $.each($('article.code-draft span[role="presentation"]'), function(){
+            res_array.push($(this).text())
+        });
+
+        $.post({
+          url: '{% url "app-api:send-ticket" %}',
+          headers: {'X-CSRFToken': '{{ csrf_token }}'},
+          data: {
+            'code': res_array.join('\n'),
+            'chat': $('#textarea1').val(),
+            'ticket_id': '{{ ticket.id }}',
+          },
+          success: function (data) {
+            if (data['message']) {
+              location.reload()
+            } else {
+              M.toast({html: '<i class="material-icons orange-text">warning</i> &nbsp; ' + data['warning']});
+            }
+          },
+          error: function(a, b, c, d){
+            M.toast({html: '<i class="material-icons red-text">error</i> &nbsp; اوه! یه مشکلی پیش اومده...'})
+          }
+        });
+      })
+    });
+
+  {% for chat in ticket.chats.all %}
+    var editor = CodeMirror($("article.code{{ forloop.counter }}")[0], {
+      readOnly: true,
+      value: `{{ chat.code|safe }}`,
+      lineNumbers: true,
+      mode: {
+        name: "python",
+        version: 3,
+        singleLineStringErrors: false
+      },
+      keyMap: "sublime",
+      autoCloseBrackets: true,
+      matchBrackets: true,
+      showCursorWhenSelecting: true,
+      theme: "monokai",
+      tabSize: 4
+    });
+  {% endfor %}
+
+    var editor = CodeMirror($("article.code-draft")[0], {
+      value: ``,
+      lineNumbers: true,
+      mode: {
+        name: "python",
+        version: 3,
+        singleLineStringErrors: false
+      },
+      keyMap: "sublime",
+      autoCloseBrackets: true,
+      matchBrackets: true,
+      showCursorWhenSelecting: true,
+      theme: "monokai",
+      tabSize: 4
+    });
+  </script>
+  <!-- codemirror scripts -->
+{% endblock js %}   

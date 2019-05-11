@@ -1,0 +1,25 @@
+{% load thumbnail %}
+{% load social_tags %}
+
+<div class="card horizontal">
+    <div class="card-image">
+      <a href="{{ obj.get_absolute_url }}">
+          {% thumbnail obj.image "300x220" crop="center" as im %}
+            <img src="{{ im.url }}" class="responsive-img" width="{{ im.width }}" height="{{ im.height }}">
+          {% endthumbnail %}
+          <span class="card-title">{{ obj.title }}</span>
+      </a>
+    </div>
+  <div class="card-content">
+
+    <div class="col m4">
+      <i class="material-icons left bookmark {% if obj|is_booked:request.user %}orange-text{% else %}black-text{% endif %}" data-id="{{ obj.id }}" data-type="Course" style="margin-top: 40px">{% if obj|is_booked:request.user %}bookmark{% else %}bookmark_border{% endif %}</i>
+      <i class="material-icons left share" style="margin-top: 40px">share</i>
+      <i class="material-icons left like {% if obj|is_liked:request.user %}red-text{% else %}black-text{% endif %}" data-id="{{ obj.id }}" data-type="Course" style="margin-top: 40px">{% if obj|is_liked:request.user %}favorite{% else %}favorite_border{% endif %}</i>
+    </div>
+
+    <div class="col m8">
+      <p>{{ obj.description|truncatewords:11|safe }}</p>
+    </div>
+  </div>
+</div>

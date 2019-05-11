@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="container">
+  <div class="section">
+    <div class="row">
+      <div class="col m6 offset-m3">
+        <div class="card-panel">
+          <h2 class="center">ورود به سایت</h2>
+          <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn waves-effect waves-light" type="submit">ورود</button>
+            <div class="center left">
+              <a class="btn pink" href="{% url 'social:begin' 'google-oauth2' %}">ورود با Google</a>
+              <a class="btn blue-grey darken-4" href="{% url 'social:begin' 'github' %}">ورود با GitHub</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}{{ block.super }}
+<div class="valign-wrapper" style="height: 60vh;">
+    <div style="margin: auto">        
+        <div class="card-panel center">
+            {% if status == 100 %}
+                <h2 class="center">{{ msg }}</h2>
+                <h3 class="center">شماره پیگیری خود را یادداشت فرمائید: <strong>{{ refid }}</strong></h3>
+            {% else %}
+                <h2>{{ msg }}</h2>
+            {% endif %}
+            <a class="btn" href="{% url 'app-base:home' %}">صفحه اصلی</a>
+            <a class="btn" href="{{ item.get_absolute_url }}">بازگشت به صفحه {{ item.title }}</a>
+            <a class="btn" href="{% url 'app-accounts:registered-items' %}">موارد ثبت نام شده</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}

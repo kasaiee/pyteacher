@@ -1,0 +1,151 @@
+{% extends "student-dashboard.html" %}
+
+
+{% block css %}{{ block.super }}
+<style type="text/css">
+  #ticket-add, #ticket-search {
+    width: 20%;
+  }
+</style>
+{% endblock css %}
+
+{% block content %}
+{{ block.super }}
+<div class="container-fluid">
+  <div class="row">
+      <div class="col s12">
+          <br>
+          <div class="row">
+            <div class="col s12 valign-wrapper">
+              <a id="ticket-add" class="btn" href="{% url 'app-accounts:ticket-add' %}">تیکت جدید <i class="material-icons right">add</i></a>
+              &nbsp;
+              <a id="ticket-search" class="btn" href="#!">جستجو <i class="material-icons right">search</i></a>
+              <div class="input-field ticket-search col s12 right valign-wrapper">
+                <input id="search-query" type="text" class="validate">
+                <label for="search-query">دنبال چی میگردی؟</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s12">
+              <div class="card-panel">
+                  <table>
+                    <thead>
+                      <tr>
+                          <th class="right-align">موضوع</th>
+                          <th class="right-align">تاریخ ارسال</th>
+                          <th class="right-align">وضعیت</th>
+                          <th class="right-align">دیده شدن</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for ticket in page.object_list %}
+                          <tr>
+                            <td class="right-align"><a href="{{ ticket.get_absolute_url }}">{{ ticket.topic }}</a></td>
+                            <td class="right-align">{{ ticket.jd_create_datetime }}</td>
+                            <td class="right-align"><span class="badge {{ ticket.status_color }} white-text">{{ ticket.status }}</span></td>
+                            <td class="right-align"><span class="badge {{ ticket.chats.last.status_color }} white-text">{{ ticket.chats.last.status }}</span></td>
+                          </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+              </div>
+
+
+              <div id="default-search-btns" class="center">
+                صفحه {{ page_num }} از {{ num_pages }}
+                <br>
+                {% if page.has_next %}
+                  <a href="?page={{ page.next_page_number }}" class="btn">بعدی <i class="material-icons right">navigate_next</i></a>
+                {% endif %}
+                {% if page.has_previous %}
+                  <a href="?page={{ page.previous_page_number }}" class="btn">قبلی <i class="material-icons left">navigate_before</i></a>
+                {% endif %}
+              </div>
+
+              <div id="search-btns" class="center hide">
+                <a id="next-page" href="#!" data-href="" class="btn">بعدی <i class="material-icons right">navigate_next</i></a>
+                <a id="prev-page" href="#!" data-href="" class="btn">قبلی <i class="material-icons left">navigate_before</i></a>
+              </div>
+            </div>
+          </div>
+      </div>
+  </div>
+</div>
+{% endblock content %}
+
+
+{% block js %}{{ block.super }}
+<script type="text/javascript">
+  $(document).ready(function(){
+    var api_url = '{% url "app-api:ticket-list" %}?search=' + $('#search-query').val().split(' ').join('+');
+    $('#ticket-search').on('click', function(){
+      $('#default-search-btns').hide()
+      $.get({
+        url: api_url,
+        success: function(data, status){
+          if (! data['next']) {
+            $('#next-page').hide()
+          } else {
+            $('#search-btns').removeClass('hide');
+            $('#next-page').show()
+            $('#next-page').data('href', data['next'])
+            api_url = data['next']
+          }
+          if (! data['previous']) {
+            $('#prev-page').hide()
+          } else {
+            $('#prev-page').show()
+            $('#prev-page').data('href', data['previous'])
+            api_url = data['previous']
+          }
+          res = ''
+          $.each(data['results'], function(index, item){
+            topic = item['topic']
+            res += `<tr>
+                <td class="right-align"><a href="${item['get_absolute_url']}">${item['topic']}</a></td>
+                  <td class="right-align">${item['jd_create_datetime']}</td>
+                  <td class="right-align"><span class="badge ${item['status_color']} white-text">${item['status']}</span></td>
+              </tr>`
+          })
+          $('tbody').html(res)
+        }
+      })
+    })
+
+
+
+    $('#next-page, #prev-page').on('click', function(){
+      $.get({
+        url: $(this).data('href'),
+        success: function(data, status){
+          if (! data['next']) {
+            $('#next-page').hide()
+          } else {
+            $('#next-page').show()
+            $('#next-page').data('href', data['next'])
+            next_page = data['next']
+          }
+          if (! data['previous']) {
+            $('#prev-page').hide()
+          } else {
+            $('#prev-page').show()
+            $('#prev-page').data('href', data['previous'])
+            prev_page = data['previous']
+          }
+          res = ''
+          $.each(data['results'], function(index, item){
+            topic = item['topic']
+            res += `<tr>
+                <td class="right-align"><a href="${item['get_absolute_url']}">${item['topic']}</a></td>
+                  <td class="right-align">${item['jd_create_datetime']}</td>
+                  <td class="right-align"><span class="badge ${item['status_color']} white-text">${item['status']}</span></td>
+              </tr>`
+          })
+          $('tbody').html(res)
+        }
+      })
+    })
+  });
+</script>
+{% endblock js %}
