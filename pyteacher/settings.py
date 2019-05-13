@@ -101,16 +101,30 @@ WSGI_APPLICATION = 'pyteacher.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'mydb',
-        'USER': 'myuser',
-        'PASSWORD': 'mypass',
-        'HOST': 'localhost',
-        'PORT': '',
+if DEBUG:
+    # local
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'mydb',
+            'USER': 'myuser',
+            'PASSWORD': 'mypass',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
     }
-}
+else:
+    # deploy
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'pyteacher_db',
+            'USER': 'pyteacher_db_user',
+            'PASSWORD': '1',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+    }
 
 
 # Password validation
