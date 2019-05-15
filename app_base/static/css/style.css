@@ -1,0 +1,311 @@
+/* Custom Stylesheet */
+/**
+ * Use this file to override Materialize files so you can update
+ * the core Materialize files in the future
+ *
+ * Made By MaterializeCSS.com
+ */
+body {
+  background-color: #f5f5f5;
+}
+pre, code, article * {
+  font-family: 'Vazir Code', 'Vazir Code Hack', monospaced !important;
+}
+body, div, p, a, ul, li, span, i, h1, h2, h3, h4, h5, h6, footer, nav, p, button, textarea, input {
+  font-family: vazir-medium;
+  direction: rtl;
+}
+strong, b {
+  font-family: vazir-bold;
+  direction: rtl;
+}
+h1 {font-size: 36px}
+h2 {font-size: 30px}
+h3 {font-size: 24px}
+h4 {font-size: 18px}
+h5 {font-size: 14px}
+h6 {font-size: 12px}
+nav ul a,
+nav .brand-logo {
+  color: #444;
+}
+
+p {
+  line-height: 2rem;
+}
+
+.sidenav-trigger {
+  color: #26a69a;
+}
+
+.parallax-container {
+  min-height: 380px;
+  line-height: 0;
+  height: auto;
+  color: rgba(255,255,255,.9);
+}
+  .parallax-container .section {
+    width: 100%;
+  }
+
+@media only screen and (max-width : 992px) {
+  .parallax-container .section {
+    position: absolute;
+    top: 40%;
+  }
+  #index-banner .section {
+    top: 10%;
+  }
+}
+
+@media only screen and (max-width : 600px) {
+  #index-banner .section {
+    top: 0;
+  }
+}
+
+.icon-block {
+  padding: 0 15px;
+}
+.icon-block .material-icons {
+  font-size: inherit;
+}
+
+footer.page-footer {
+  margin: 0;
+}
+
+.card .card-image .card-title {
+  right: 0
+}
+
+
+.input-field.ticket-search > label:not(.label-icon).active {
+  transform: translatex(150px) translateY(-14px) scale(0.8);
+  -webkit-transform: translatex(150px) translateY(-14px) scale(0.8);
+}
+
+.input-field.topic > label:not(.label-icon).active {
+  transform: translatex(195px) translateY(-14px) scale(0.8);
+  -webkit-transform: translatex(195px) translateY(-14px) scale(0.8);
+}
+.input-field > label:not(.label-icon).active {
+  transform: translatex(75px) translateY(-14px) scale(0.8);
+  -webkit-transform: translatex(75px) translateY(-14px) scale(0.8);
+}
+.input-field.comment-input-field > label:not(.label-icon).active {
+  transform: translatex(135px) translateY(-14px) scale(0.8) !important;
+  -webkit-transform: translatex(135px) translateY(-14px) scale(0.8) !important;
+}
+.btn-floating.halfway-fab {
+  right: 101px;
+  bottom: -37px;
+  border: solid #fff 3px;
+  width: 80px;
+  height: auto;
+}
+
+.person-bio {
+  padding-top: 50px !important;
+}
+
+.ltr {
+  direction: ltr !important
+}
+.rtl {
+  direction: rtl !important
+}
+.more-course:after, .solve-exercises:after {
+  font-family: 'Material Icons';
+  content: 'keyboard_arrow_left';
+  font-size: 23px;
+  position: relative;
+  top: 8px;
+}
+.course-list:before {
+  font-family: 'Material Icons';
+  content: 'keyboard_arrow_left';
+  font-size: 23px;
+  position: relative;
+  top: 8px;
+}
+
+.attachment-files:before {
+  font-family: 'Material Icons';
+  content: 'insert_drive_file';
+  font-size: 35px;
+  position: relative;
+  top: -3px;
+  background-color: #ffffff40;
+  padding: 3px 12px;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.action-icons i, i.like, i.share, i.bookmark {
+  cursor: pointer;
+}
+
+.user-avatar {
+  border-radius: 50%;
+  border: 4px solid #009688;
+  height: 150px;
+  width: 150px;
+}
+
+.avatar-in-comment {
+  width: 55px;
+  height: auto;
+  border-radius: 50%;
+  border: 3px solid #eee;
+}
+
+.thin-card {
+  padding: 15px 24px;
+}
+
+.comment-action a {
+  margin-right: 5px;
+}
+.comment-action i {
+  font-size: 20px
+}
+
+.input-field.col label {
+  right: 0.75rem;
+}
+
+.fixed-action-btn.direction-left ul, .fixed-action-btn.direction-right ul {
+  direction: ltr;
+}
+
+.fixed-action-btn ul {
+  right: -35px;
+}
+
+article.code * {
+  direction: ltr
+}
+
+.sidenav li > a > i, .sidenav li > a > [class^="mdi-"], .sidenav li > a li > a > [class*="mdi-"], .sidenav li > a > i.material-icons {
+  margin: 0 0 0 10px;
+}
+
+ul.collapsible {
+  padding-right: 0;
+}
+
+.collapsible span.badge {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.collapsible-header i {
+  margin-right: 0;
+  margin-left: 1rem;
+}
+
+ul:not(.browser-default) {
+  padding-right: 0;
+}
+
+.rtl-select ul span {
+  float: right;
+}
+
+.select-wrapper .caret {
+  left: 0;
+  right: auto;
+}
+
+.tabs .indicator {
+  background-color: #26a69a;
+}
+
+.tabs .tab a:focus, .tabs .tab a:focus.active {
+  background-color: #26a69a1c;
+}
+
+.file-title {
+  font-weight: bold;
+  font-family: 'Vazir Code';
+}
+
+.breadcrumb {
+  font-size: 14px;
+}
+.breadcrumb-nav, .breadcrumb-nav .col.valign-wrapper {
+  height: 45px;
+}
+.breadcrumb-nav .col.valign-wrapper {
+  margin-right: 40px;
+}
+.breadcrumb:after {
+  content: 'navigate_before';
+  color: rgba(255, 255, 255, 0.7);
+  vertical-align: top;
+  display: inline-block;
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 25px;
+  margin: 0 10px 0 8px;
+  -webkit-font-smoothing: antialiased;
+}
+.breadcrumb:before {
+  content: '';
+  color: rgba(255, 255, 255, 0);
+  vertical-align: top;
+  display: inline-block;
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 1px;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+ul.errorlist li {
+  color: red;
+}
+
+span[id^="error_"] {
+  color: #e91e63;
+}
+
+.dilikes-count {
+  position: relative;
+  top: -4px;
+  right: 4px;
+}
+
+.likes-count {
+  position: relative;
+  top: -5px;
+}
+
+.container-fluid {
+  padding: 0 5%;
+}
+
+[id^="sharing-modal"] span {
+  display: inline-block;
+  margin: 30px 20px 0px;
+}
+[id^="sharing-modal"] span i {
+  font-size: 30px;
+}
+.fa-linkedin {
+  color: #2978b5;
+}
+.fa-facebook {
+  color: #3b579d;
+}
+.fa-twitter {
+  color: #47abe1
+}
+
+#svgContainer {
+  margin: 0 auto;
+  max-width: 30%;
+}
