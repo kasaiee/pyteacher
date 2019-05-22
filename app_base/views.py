@@ -144,7 +144,7 @@ def payment(request, item_id, item_type, phone='09377000000', email='mail@exampl
         item = CourseSession.objects.get(id=item_id)
         price = item.price
     # Important: need to edit for realy server.
-    CallbackURL = 'http://127.0.0.1:8000' + reverse('app-base:verify', args=(item_id, item_type))
+    CallbackURL = settings.ALLOWED_HOSTS[0] + reverse('app-base:verify', args=(item_id, item_type))
     result = settings.CLIENT.service.PaymentRequest(settings.MERCHANT, price, description, email, phone, CallbackURL)
     if result.Status == 100:
         return redirect('https://www.zarinpal.com/pg/StartPay/' + str(result.Authority))
