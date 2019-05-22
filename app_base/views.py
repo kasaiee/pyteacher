@@ -145,7 +145,7 @@ def payment(request, item_id, item_type, phone='09377000000', email='mail@exampl
         price = item.price
     # Important: need to edit for realy server.
     CallbackURL = settings.ALLOWED_HOSTS[0] + reverse('app-base:verify', args=(item_id, item_type))
-    result = settings.CLIENT.service.PaymentRequest(settings.MERCHANT, price, 'description', email, phone, CallbackURL)
+    result = settings.CLIENT.service.PaymentRequest(settings.MERCHANT, price, description, email, phone, CallbackURL)
     if result.Status == 100:
         return redirect('https://www.zarinpal.com/pg/StartPay/' + str(result.Authority))
     elif result.Status == 101:
