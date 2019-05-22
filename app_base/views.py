@@ -77,7 +77,7 @@ def course_session_exercise_detail_with_reply(request, course_slug, session_slug
 def register_course(request, item_id, item_type):
     phone = request.GET.get('phone')
     email = request.GET.get('email')
-    description = request.GET.get('description')
+    description = request.GET.get('description') if request.GET.get('description') else ''
     if item_type not in ['Course', 'CourseSession']:
         messages.error(request, 'اوه! یه مشکلی پیش اومده...')
         return HttpResponseRedirect('/')
