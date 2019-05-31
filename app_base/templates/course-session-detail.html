@@ -230,7 +230,7 @@
         email = $('#email').val();
         phone = $('#phone').val();
         description = $('#description').val();
-        payment_url = `{% url 'app-base:payment' item_id=course.id item_type='Course' %}?phone=${phone}&phone=${phone}&description=${description}`
+        payment_url = `{% url 'app-base:payment' item_id=session.id item_type='CourseSession' %}?phone=${phone}&phone=${phone}&description=${description}`
         // window.location = payment_url;
         console.log(payment_url)
       })
