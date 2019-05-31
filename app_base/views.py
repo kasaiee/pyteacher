@@ -131,8 +131,12 @@ def change_seen_status(request):
 def payment(request, item_id, item_type, phone='09377000000', email='mail@example.com', description='خرید از پای‌تیچر'):
     """ price per toman """
     phone = request.GET.get('phone') if phone else phone
-    email = request.GET.get('email') if email else email
+    email = request.user.email
     description = request.GET.get('description') if description else description
+    try:
+        description = eval(item_type).objects.get(id=item_id).title
+    except:
+        description = 'خرید از سایت PyTeacher.ir'
     ctx = {}
     if item_type not in ['Course', 'CourseSession']:
         messages.error(request, 'اوه! یه مشکلی پیش اومده...')

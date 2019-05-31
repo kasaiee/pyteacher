@@ -76,22 +76,6 @@
                     <h3 class="center">شما قبلا {{ course|your_investment:request.user }} تومان روی این دوره سرمایه گذاری کرده اید</h3>
                   {% endif %}
                     <h3 class="center teal-text"><strong>{{ course|calc_price:request.user }} تومان تا سرمایه گذاری کامل</strong></h3>
-                    <div class="row">
-                      <div class="input-field col s6">
-                        <input placeholder="email" id="email" type="text" class="validate" value="{{ request.user.email }}">
-                        <label for="email">ایمیل</label>
-                      </div>
-                      <div class="input-field col s6">
-                        <input id="phone" type="text" class="validate" value="{{ request.user.profile.phone }}">
-                        <label for="phone">شماره همراه</label>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="input-field col s12">
-                        <input value="توضیحاتی در مورد این خرید در اینجا میتوانید وارد کنید..." id="description" type="text" class="validate">
-                        <label for="description">توضیحات</label>
-                      </div>
-                    </div>
                   {% endif %}
                 </div>
                 <div class="modal-footer">

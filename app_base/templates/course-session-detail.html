@@ -125,27 +125,10 @@
                     <h4>این دوره رایگان نیست!</h4>
                     <p>در صورت تمایل به شرکت در این دوره لطفا به میزان مشخص شده روی خود سرمایه گذاری کنید. در صورت تمایل به سرمایه گذاری روی خودتان روی دکمه پرداخت کلیک کنید!</p>
                     <h3 class="center teal-text">سرمایه گذاری: <strong>{{ session.price }} تومان</strong></h3>
-                    <div class="row">
-                      <div class="input-field col s6">
-                        <input placeholder="email" id="email" type="text" class="validate" value="{{ request.user.email }}">
-                        <label for="email">ایمیل</label>
-                      </div>
-                      <div class="input-field col s6">
-                        <input id="phone" type="text" class="validate" value="{{ request.user.profile.phone }}">
-                        <label for="phone">شماره همراه</label>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="input-field col s12">
-                        <input value="توضیحاتی در مورد این خرید در اینجا میتوانید وارد کنید..." id="description" type="text" class="validate">
-                        <label for="description">توضیحات</label>
-                      </div>
-                    </div>
                   </div>
                   <div class="modal-footer">
                     {# {% url 'app-base:register-course' item_id=course.id item_type='Course' %} #}
-                    <a id="payment" href="#!" class="modal-close waves-effect waves-green btn-flat">پرداخت</a>
-                    <a href="#!" class="modal-close waves-effect waves-green btn-flat">بیخیال</a>
+                    <a href="{% url 'app-base:payment' item_id=session.id item_type='CourseSession' %}" class="modal-close waves-effect waves-green btn-flat">پرداخت</a>
                   </div>
                 </div>
               {% endif %}
@@ -225,15 +208,6 @@
       $('.tooltipped').tooltip();
 
       $('.fixed-action-btn').floatingActionButton();
-
-      $('#payment').on('click', function(){
-        email = $('#email').val();
-        phone = $('#phone').val();
-        description = $('#description').val();
-        payment_url = `{% url 'app-base:payment' item_id=session.id item_type='CourseSession' %}?phone=${phone}&phone=${phone}&description=${description}`
-        // window.location = payment_url;
-        console.log(payment_url)
-      })
 
       /* Shapes */
       var svgContainer = document.getElementById('svgContainer');
