@@ -79,8 +79,7 @@
                   {% endif %}
                 </div>
                 <div class="modal-footer">
-                  {# {% url 'app-base:register-course' item_id=course.id item_type='Course' %} #}
-                  <a id="payment" href="#!" class="modal-close waves-effect waves-green btn-flat">پرداخت</a>
+                  <a id="payment" href="{% url 'app-base:register-course' item_id=course.id item_type='Course' %}" class="modal-close waves-effect waves-green btn-flat">پرداخت</a>
                   <a href="#!" class="modal-close waves-effect waves-green btn-flat">بیخیال</a>
                 </div>
               </div>
