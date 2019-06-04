@@ -13,7 +13,17 @@ from django.contrib.auth.decorators import login_required
 from django.views.static import serve
 from django.conf import settings
 from django.http import HttpResponse
+from django.views.generic import View
 
+
+class SendfileView(View):
+    prefix = ""
+
+    def get(self, request, path):
+        response = HttpResponse()
+        response["X-Accel-Redirect"] = f"{self.prefix}{path}"
+        del response["Content-Type"]
+        return response
 
 def protected_serve(request, path, document_root=None, show_indexes=False):
     if 'session/private-videos' not in path:
@@ -25,7 +35,7 @@ def protected_serve(request, path, document_root=None, show_indexes=False):
         if request.user.is_authenticated and (validate_session or validate_cources):
             response = HttpResponse()
             response["X-Accel-Redirect"] = f"/__media__/{path}"
-            del response["Content-Type"]
+            # del response["Content-Type"]
             return response
         else:
             return serve(request, settings.STATIC_URL + 'video/buy.mp4', '', show_indexes)

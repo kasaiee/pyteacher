@@ -17,6 +17,7 @@ from django.urls import path
 from app_base import views
 from django.conf.urls import url
 from django.conf import settings
+from django.urls import re_path
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -31,6 +32,8 @@ urlpatterns = [
          views.course_session_exercise_detail, name='course-session-exercise-detail'),
     path('<str:course_slug>/<str:session_slug>/<str:exercise_slug>/<int:student_id>',
          views.course_session_exercise_detail_with_reply, name='course-session-exercise-detail-with-reply'),
-    url(r'^%s(?P<path>.*)$' % settings.MEDIA_URL[1:], views.protected_serve, {
-        'document_root': settings.MEDIA_ROOT})
+
+    re_path(r"^media/(?P<path>.*)$", views.SendfileView.as_view(prefix="/__media__/"))
+    # url(r'^%s(?P<path>.*)$' % settings.MEDIA_URL[1:], views.protected_serve, {
+    #     'document_root': settings.MEDIA_ROOT})
 ]
