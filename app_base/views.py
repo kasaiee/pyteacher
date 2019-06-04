@@ -25,7 +25,7 @@ def protected_serve(request, path, document_root=None, show_indexes=False):
         validate_session = CourseSession.objects.filter(id=item_id).first() in request.user.profile.registered_sessions()
         if request.user.is_authenticated and (validate_session or validate_cources):
             # send myfile.pdf to user
-            return sendfile(request, SENDFILE_ROOT + path)
+            return sendfile(request, settings.SENDFILE_ROOT + path)
         else:
             # send myfile.pdf to user
             return sendfile(request, settings.STATIC_ROOT + 'video/buy.mp4')
