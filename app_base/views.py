@@ -21,18 +21,18 @@ class SendfileView(View):
 
     def get(self, request, path):
         if 'session/private-videos' not in path:
-            return serve(request, path, document_root, show_indexes)
+            return serve(request, 'media/' + path, '', show_indexes=False)
         else:
             item_id = path.split('/')[2]
             validate_cources = Course.objects.filter(id=item_id).first() in request.user.profile.registered_courses()
             validate_session = CourseSession.objects.filter(id=item_id).first() in request.user.profile.registered_sessions()
             if request.user.is_authenticated and (validate_session or validate_cources):
                 response = HttpResponse()
-                response["X-Accel-Redirect"] = f"{self.prefix}{path}"
+                response["X-Accel-Redirect"] = f"{self.prefix}media/{path}"
                 del response["Content-Type"]
                 return response
             else:
-                return serve(request, settings.STATIC_URL + 'video/buy.mp4', '', show_indexes)
+                return serve(request, settings.STATIC_URL + 'video/buy.mp4', '', show_indexes=False)
 
 def protected_serve(request, path, document_root=None, show_indexes=False):
     if 'session/private-videos' not in path:
