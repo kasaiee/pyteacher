@@ -25,8 +25,7 @@ def protected_serve(request, path, document_root=None, show_indexes=False):
         if validate_session or validate_cources:
             session = CourseSession.objects.get(id=item_id)
             return sendfile(request, session.video.path)
-    else:
-        return serve(request, settings.STATIC_URL + 'video/buy.mp4', '', show_indexes)
+    return sendfile(request, settings.STATIC_URL + 'video/buy.mp4')
 
 
 def home(request):
