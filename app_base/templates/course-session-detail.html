@@ -114,9 +114,10 @@
               <p>{{ session.description|safe }}</p>
 
               {% if session in request.user.profile.registered_items %}
-                <a href="#!" class="btn disabled">شما قبلا روی این قسمت سرمایه گذاری کرده اید.</a>
                 {% if session.video %}
-                  <a class="left btn blue waves-effect waves-light" href="{{ session.video.url }}" download>
+                  <a class="left btn blue waves-effect waves-light" href="{{ session.video.url }}" download>دانلود فیلم با کیفیت اصلی</a>
+                {% else %}
+                  <a href="#!" class="btn disabled">شما قبلا روی این قسمت سرمایه گذاری کرده اید.</a>
                 {% endif %}
               {% elif session.price == 0 %}
                 <a class="btn" href="{% url 'app-base:register-course' item_id=session.id item_type='CourseSession' %}">سرمایه گذاری روی این قسمت</a>
