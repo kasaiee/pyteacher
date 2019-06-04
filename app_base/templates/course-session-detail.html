@@ -115,7 +115,7 @@
 
               {% if session in request.user.profile.registered_items %}
                 {% if session.video %}
-                  <a class="left btn blue waves-effect waves-light" href="{{ session.video.url }}" download>دانلود فیلم با کیفیت اصلی</a>
+                  <a class="btn blue waves-effect waves-light" href="{{ session.video.url }}" download>دانلود فیلم با کیفیت اصلی <i class="material-icons white-text right">file_download</i></a>
                 {% else %}
                   <a href="#!" class="btn disabled">شما قبلا روی این قسمت سرمایه گذاری کرده اید.</a>
                 {% endif %}
