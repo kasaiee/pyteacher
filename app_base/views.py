@@ -12,6 +12,7 @@ from app_base.models import Course, CourseSession, ExerciseByStudent
 from django.contrib.auth.decorators import login_required
 from django.views.static import serve
 from django.conf import settings
+from sendfile import sendfile
 
 
 def protected_serve(request, path, document_root=None, show_indexes=False):
