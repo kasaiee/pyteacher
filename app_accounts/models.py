@@ -97,8 +97,8 @@ def save_user_profile(sender, instance, **kwargs):
 
 class RegisteredItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
-    session = models.ForeignKey(CourseSession, on_delete=models.CASCADE, null=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True, blank=True)
+    session = models.ForeignKey(CourseSession, on_delete=models.CASCADE, null=True, blank=True)
 
     def item(self):
         if self.course:

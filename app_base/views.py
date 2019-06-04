@@ -12,19 +12,23 @@ from app_base.models import Course, CourseSession, ExerciseByStudent
 from django.contrib.auth.decorators import login_required
 from django.views.static import serve
 from django.conf import settings
+from sendfile import sendfile
 
 
 def protected_serve(request, path, document_root=None, show_indexes=False):
     if 'session/private-videos' not in path:
-        return serve(request, path, document_root, show_indexes)
+        # send myfile.pdf to user
+        return sendfile(request, settings.SENDFILE_ROOT + path)
     else:
         item_id = path.split('/')[2]
         validate_cources = Course.objects.filter(id=item_id).first() in request.user.profile.registered_courses()
         validate_session = CourseSession.objects.filter(id=item_id).first() in request.user.profile.registered_sessions()
         if request.user.is_authenticated and (validate_session or validate_cources):
-            return serve(request, path, document_root, show_indexes)
+            # send myfile.pdf to user
+            return sendfile(request, SENDFILE_ROOT + path)
         else:
-            return serve(request, settings.STATIC_URL + 'video/buy.mp4', '', show_indexes)
+            # send myfile.pdf to user
+            return sendfile(request, settings.STATIC_ROOT + 'video/buy.mp4')
 
 
 def home(request):
