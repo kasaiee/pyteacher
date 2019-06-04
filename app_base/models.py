@@ -9,8 +9,11 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.contenttypes.fields import GenericForeignKey
 from app_chat.models import ChatGroup
 from app_social.models import Like, Bookmark, Comment
+from django.core.files.storage import FileSystemStorage
+from django.conf import settings
 from django.contrib.auth import get_user_model
 User = get_user_model()
+sendfile_storage = FileSystemStorage(location=settings.SENDFILE_ROOT)
 
 
 def course_image_path(instance, filename):
@@ -58,7 +61,7 @@ class CourseSession(models.Model):
     aparat_video = models.TextField(null=True, blank=True)
     prev_session = models.ForeignKey(
         'CourseSession', on_delete=models.SET_NULL, null=True, related_name='prev', blank=True)
-    video = models.FileField(upload_to=get_upload_path, null=True, blank=True)
+    video = models.FileField(upload_to=get_upload_path, null=True, blank=True, storage=sendfile_storage)
     attachment_files = GenericRelation('AttachmentFiles')
     chats = GenericRelation(ChatGroup)
     likes = GenericRelation(Like)
