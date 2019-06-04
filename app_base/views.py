@@ -18,15 +18,15 @@ from sendfile import sendfile
 def protected_serve(request, path, document_root=None, show_indexes=False):
     if 'session/private-videos' not in path:
         return serve(request, path, document_root, show_indexes)
-    else:
+    elif request.user.is_authenticated:
         item_id = path.split('/')[2]
         validate_cources = Course.objects.filter(id=item_id).first() in request.user.profile.registered_courses()
         validate_session = CourseSession.objects.filter(id=item_id).first() in request.user.profile.registered_sessions()
-        if request.user.is_authenticated and (validate_session or validate_cources):
+        if validate_session or validate_cources:
             session = CourseSession.objects.get(id=item_id)
             return sendfile(request, session.video.path)
-        else:
-            return serve(request, settings.STATIC_URL + 'video/buy.mp4', '', show_indexes)
+    else:
+        return serve(request, settings.STATIC_URL + 'video/buy.mp4', '', show_indexes)
 
 
 def home(request):
