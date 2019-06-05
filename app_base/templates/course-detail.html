@@ -79,7 +79,8 @@
                   {% endif %}
                 </div>
                 <div class="modal-footer">
-                  <a id="payment" href="{% url 'app-base:register-course' item_id=course.id item_type='Course' %}" class="modal-close waves-effect waves-green btn-flat">پرداخت</a>
+                  <a href="{% url 'app-base:payment' item_id=course.id item_type='Course' %}" class="modal-close waves-effect waves-green btn-flat">پرداخت</a>
+                  {# <a id="payment" href="{% url 'app-base:register-course' item_id=course.id item_type='Course' %}" class="modal-close waves-effect waves-green btn-flat">پرداخت</a> #}
                   <a href="#!" class="modal-close waves-effect waves-green btn-flat">بیخیال</a>
                 </div>
               </div>
@@ -164,7 +165,9 @@
   <script type="text/javascript">
     $(document).ready(function(){
       $('.fixed-action-btn').floatingActionButton();
-
+      
+      {% comment %}
+      TODO: add phone and email in payment later
       $('#payment').on('click', function(){
         email = $('#email').val();
         phone = $('#phone').val();
@@ -173,6 +176,7 @@
         // window.location = payment_url;
         console.log(payment_url)
       })
+      {% endcomment %}
 
       /* Shapes */
       var svgContainer = document.getElementById('svgContainer');

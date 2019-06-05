@@ -85,7 +85,7 @@ def register_course(request, item_id, item_type):
     model = eval(item_type)
     item = model.objects.get(id=item_id)
     if item_type == 'Course' and item not in [rc.course for rc in request.user.registereditem_set.all()]:
-        if item.price:
+        if item.price():
             payment(request, item_id, item_type, phone, email, description)
         request.user.registereditem_set.create(course=item)
         for session in item.coursesession_set.all():
