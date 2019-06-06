@@ -88,7 +88,7 @@
           </div>
         </div>
         <div id="course-sessions" class="col s12">
-          {% for session in course.coursesession_set.all reversed %}
+          {% for session in ordered_sessions %}
               <div class="card-panel">
                 <div class="">
                   <a href="{{ session.get_absolute_url }}">

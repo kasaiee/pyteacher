@@ -45,6 +45,9 @@ class Course(models.Model):
         self.slug = self.title.replace(' ', '-')
         super().save(*args, **kwargs)
 
+    def ordered_sessions(self):
+        return self.coursesession_set.all().orderby('-id')
+
     def __str__(self):
         return self.title
 
