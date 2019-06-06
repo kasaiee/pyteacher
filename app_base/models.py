@@ -46,7 +46,7 @@ class Course(models.Model):
         super().save(*args, **kwargs)
 
     def ordered_sessions(self):
-        return self.coursesession_set.all().orderby('-id')
+        return self.coursesession_set.all().order_by('-id')
 
     def __str__(self):
         return self.title
