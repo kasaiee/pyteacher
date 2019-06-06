@@ -28,7 +28,7 @@ class Bookmark(models.Model):
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    value = models.CharField(max_length=400, null=True)
+    value = models.CharField(max_length=1200, null=True)
     approved = models.BooleanField(default=False)
     create_datetime = models.DateTimeField(auto_now_add=True, null=True)
     comments = GenericRelation('Comment')
