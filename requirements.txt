@@ -16,7 +16,7 @@ django-js-asset==1.2.2
 django-materialize-css==0.0.1
 django-sendfile==0.3.11
 django-social-share==1.3.2
-djangorestframework==3.9.2
+djangorestframework==3.11.2
 idna==2.8
 ipdb==0.11
 ipython==7.2.0
