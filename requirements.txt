@@ -7,7 +7,7 @@ chardet==3.0.4
 crispy-forms-materialize==0.2
 decorator==4.3.2
 defusedxml==0.5.0
-Django==2.2.1
+Django==2.2.21
 django-autoslug==1.9.4
 django-ckeditor==5.6.1
 django-crispy-forms==1.7.2
